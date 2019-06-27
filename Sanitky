@@ -1,0 +1,183 @@
+**Main**
+
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        zdravotnickaZachrannaSluzba Kocian = new zdravotnickaZachrannaSluzba();
+        Kocian.Inicialize(); // vytvoøíme si zachranou sluzbu a inicializujeme ji
+
+        for (int i = 0; i <= 11; i++) { //pro 12 mesicu vzdycky vypocitame pocet vyjezdu a prumernou reakcni dobu a tyto hodnoty nasledne vypisujeme do konzole vzdycky za kazdy mesic pro 5 sanitek
+
+            Kocian.sanitkyInMonth();  //mesicni vypocet pro sanitky
+            System.out.println();
+            System.out.println("--------" + (i+1) + " MESIC----------");
+            System.out.println("Poradi sanitek podle poctu vyjezdu: ");
+            System.out.println();
+            for (int o = 0; o <= Kocian.newSanitky.size() - 1; o++) {
+            	Kocian.sortByPocetVyjezdu();  //seradime sanitky podle poctu vyjezdu od nejmensiho po nejvetsi
+            	System.out.println(Kocian.newSanitky.get(o).getJmenoSanitky() + " pocet vyjezdu: " + Kocian.newSanitky.get(o).getPocetVyjezdu());
+                //výpis do konzole jmena sanitky a poctu vyjezdu
+            }
+            System.out.println();
+            System.out.println("Poradi sanitek podle prumerne reakcni doby: ");
+            System.out.println();
+            for (int o = 0; o <= Kocian.newSanitky.size() - 1; o++) {
+            	Kocian.sortByPrumernaReakcniDoba(); // seradime sanitky podle prumerne reakcni doby 
+            	System.out.println(Kocian.newSanitky.get(o).getJmenoSanitky() + " prumerna reakcni doba za mesic: " + Kocian.newSanitky.get(o).getPrumernaReakcniDoba()/(i+1) + " minut");
+                //nejdrive si vypocitame prumernou reakcni dobu podle souctu reakcnich dob za dane mesice a tento soucet vydelime poctem mesicu
+            	//dale vypiseme do konzole jmeno sanitky a prumernou reakcni dobu jiz serazenych sanitek
+            }
+
+        }
+
+        System.out.println("---------------------------");
+        
+
+    }
+}
+
+**zdravotCentrum.java**
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class zdravotnickaZachrannaSluzba {
+
+    public sanitka sanitka_1;
+    public sanitka sanitka_2;
+    public sanitka sanitka_3;
+    public sanitka sanitka_4;
+    public sanitka sanitka_5;  // pet sanitek podle zadani
+
+    ArrayList<sanitka> newSanitky = new ArrayList<sanitka>();  //pole pro sanitky, pro dalsi operace jako serazeni podle poctu vyjezdu apod.
+
+
+    public void Inicialize() { //vytvoreni a nastaveni jmena 5 sanitkam, nasledne jsou pridany do arraylistu
+    	
+    	sanitka_1 = new sanitka(); //vytvoreni sanitky
+    	sanitka_1.setJmenoSanitky("sanitka 1"); // nastaveni jmena sanitky
+    	newSanitky.add(sanitka_1); //pridani sanitky do arraylistu
+
+    	sanitka_2 = new sanitka();
+    	sanitka_2.setJmenoSanitky("sanitka 2");
+    	newSanitky.add(sanitka_2);
+    	
+    	sanitka_3 = new sanitka();
+    	sanitka_3.setJmenoSanitky("sanitka 3");
+    	newSanitky.add(sanitka_3);
+    	
+    	sanitka_4 = new sanitka();
+    	sanitka_4.setJmenoSanitky("sanitka 4");
+    	newSanitky.add(sanitka_4);
+    	
+    	sanitka_5 = new sanitka();
+    	sanitka_5.setJmenoSanitky("sanitka 5");
+    	newSanitky.add(sanitka_5);
+
+    }
+
+    public void sanitkyInMonth() { //funkce pro nastaveni poctu vyjezdu a reaknci doby sanitek jak prumerne tak normalni vsechno je zde nahodne podle zadani
+    	sanitka_1.setPocetVyjezdu(RandomGenerator(50, 250)); //podle zadani se nahodne nastavi pocet vyjezdu sanitky od 50 do 250
+    	sanitka_1.setReakcniDoba(RandomGenerator(2, 30)); //podle zadani se nahodne nastavi reakcni doba sanitky od 2 do 30 minut
+        sanitka_1.setPrumernaReakcniDoba(sanitka_1.getPrumernaReakcniDoba()+sanitka_1.getReakcniDoba()); //nastavime prumernou reakcni dobu jako soucet reakcnich dob a pote v mainu vypocitame
+    	
+    	sanitka_2.setPocetVyjezdu(RandomGenerator(50, 250)); 
+    	sanitka_2.setReakcniDoba(RandomGenerator(2, 30)); 
+    	sanitka_2.setPrumernaReakcniDoba(sanitka_2.getPrumernaReakcniDoba()+sanitka_2.getReakcniDoba());
+    	
+    	sanitka_3.setPocetVyjezdu(RandomGenerator(50, 250)); 
+    	sanitka_3.setReakcniDoba(RandomGenerator(2, 30)); 
+    	sanitka_3.setPrumernaReakcniDoba(sanitka_3.getPrumernaReakcniDoba()+sanitka_3.getReakcniDoba());
+    	
+    	sanitka_4.setPocetVyjezdu(RandomGenerator(50, 250)); 
+    	sanitka_4.setReakcniDoba(RandomGenerator(2, 30)); 
+    	sanitka_4.setPrumernaReakcniDoba(sanitka_4.getPrumernaReakcniDoba()+sanitka_4.getReakcniDoba());
+    	
+    	sanitka_5.setPocetVyjezdu(RandomGenerator(50, 250)); 
+    	sanitka_5.setReakcniDoba(RandomGenerator(2, 30)); 
+    	sanitka_5.setPrumernaReakcniDoba(sanitka_5.getPrumernaReakcniDoba()+sanitka_5.getReakcniDoba());
+
+        sortByPocetVyjezdu();
+    }
+
+    public void sortByPocetVyjezdu() { //funkce na serazeni podle poctu vyjezdu
+        for (int o = 0; o < newSanitky.size() - 1; o++) {
+            for (int i = 0; i < newSanitky.size() - 1; i++) {
+                if (newSanitky.get(i).getPocetVyjezdu() > newSanitky.get(i + 1).getPocetVyjezdu()) { //pokud ma sanitka v arraylistu na dalsi pozici mensi pocet vyjezdu
+                	// tak si vytvorime pomocnou sanitku, kterou nasledne prohodime s nasledujici sanitkou
+                    sanitka zaloha = newSanitky.get(i); 
+                    newSanitky.set(i, newSanitky.get(i + 1)); //prohozeni sanitek
+                    newSanitky.set(i + 1, zaloha);
+                }
+            }
+        }
+    }
+
+    public void sortByPrumernaReakcniDoba() { //funkce na seøazení podle zisku
+        for (int o = 0; o < newSanitky.size() - 1; o++) {
+            for (int i = 0; i < newSanitky.size() - 1; i++) {
+                if (newSanitky.get(i).getPrumernaReakcniDoba() > newSanitky.get(i + 1).getPrumernaReakcniDoba()) { //pokud ma sanitka v arraylistu na dalsi pozici mensi prumernou reakcni dobu
+                	//tak si vytvorime pomocnou sanitku, kterou nasledne prohodime s nasledujici sanitkou
+                    sanitka zaloha = newSanitky.get(i); 
+                    newSanitky.set(i, newSanitky.get(i + 1)); //prohozeni sanitek
+                    newSanitky.set(i + 1, zaloha);
+                }
+            }
+        }
+    }
+
+    public int RandomGenerator(int min, int max) {//funkce pro generovani nahodnych hodnot
+        
+        return (int )(Math.random() * max + min);//vraceni nahodne hodnoty se zadanym minimem a maximem
+    }
+
+    
+}
+**sanitka.java**
+package com.company;
+
+public class sanitka {
+
+	private String jmenoSanitky;
+    private int pocetVyjezdu=0;
+    private int reakcniDoba=0;
+    private double prumernaReakcniDoba=0;
+  
+
+    public String getJmenoSanitky() {  //vrati jmeno sanitky
+        return jmenoSanitky;
+    }
+
+    public void setJmenoSanitky(String jmeno) { //nastavi jmeno sanitky
+        this.jmenoSanitky = jmeno;
+    }
+    
+    public int getPocetVyjezdu() {  //vrati pocet vyjezdu
+        return pocetVyjezdu;
+    }
+
+    public void setPocetVyjezdu(int cislo) { //nastavi pocet vyjezdu
+        this.pocetVyjezdu = cislo;
+    }
+
+    public int getReakcniDoba() {  //vrati reakcni dobu
+        return reakcniDoba;
+    }
+
+    public void setReakcniDoba(int cislo) { //nastavi reakcni dobu
+        this.reakcniDoba = cislo;
+    }
+    
+    public double getPrumernaReakcniDoba() {  //vrati reakcni dobu
+        return prumernaReakcniDoba;
+    }
+
+    public void setPrumernaReakcniDoba(double cislo) { //nastavi reakcni dobu
+        this.prumernaReakcniDoba = cislo;
+    }
+
+   
+}
