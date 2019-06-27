@@ -1,0 +1,210 @@
+**Main.java**
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Owner me = new Owner();
+        me.Load();
+        me.generateFoodForRestaurants();
+        me.generateMoneyForRestaurants();
+
+        System.out.println("-------------------CELKOVÝ PRODEJ JEDNOTLIVÝCH POLOŽEK ZA KAŽDÝ MĚSÍC---------------------");
+
+        for (int j = 0; j < me.restaurantsArray.size()-1; j++) {
+            for (int i = 0; i < 5; i++) {
+                 System.out.println(me.restaurantsArray.get(j).getNameOfRestaurant() + ", prodal za " + (i+1) + " měsíc " + me.restaurantsArray.get(j).getMonths(0) + " položek.");
+            }
+        }
+
+        System.out.println("-------------------CELKOVÝ PRODEJ JEDNOTLIVÝCH POLOŽEK---------------------");
+
+        for (int i = 0; i < me.restaurantsArray.size(); i++) {
+            System.out.println("-----------------------");
+            System.out.println(me.restaurantsArray.get(i).getNameOfRestaurant() + " prodal Hamburgery v počtu " + me.restaurantsArray.get(i).getCountOfSoldHamburger() + " za " + (me.restaurantsArray.get(i).getCountOfSoldHamburger() * me.Hamburger) + " kč.");
+            System.out.println(me.restaurantsArray.get(i).getNameOfRestaurant() + " prodal Coca Colu v počtu " + me.restaurantsArray.get(i).getCountOfSoldCocaCola() + " za " + (me.restaurantsArray.get(i).getCountOfSoldCocaCola() * me.CocaCola) + " kč.");
+            System.out.println(me.restaurantsArray.get(i).getNameOfRestaurant() + " prodal Hranolky v počtu " + me.restaurantsArray.get(i).getCountOfSoldFries() + " za " + (me.restaurantsArray.get(i).getCountOfSoldFries() * me.Fries) + " kč.");
+            System.out.println(me.restaurantsArray.get(i).getNameOfRestaurant() + " prodal Zmrzlinu v počtu " + me.restaurantsArray.get(i).getCountOfSoldIceCream() + " za " + (me.restaurantsArray.get(i).getCountOfSoldIceCream() * me.IceCream) + " kč.");
+            System.out.println("-----------------------");
+        }
+
+        me.sortByMoney();
+
+        System.out.println("-------------------CELKOVÝ ZISK---------------------");
+
+        for (int i = 0; i < me.restaurantsArray.size(); i++) {
+            System.out.println(me.restaurantsArray.get(i).getNameOfRestaurant() + ", vydělal za 6 měsíců " + me.restaurantsArray.get(i).getMoney() + " kč.");
+        }
+
+    }
+}
+
+**Owner.java**
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Owner {
+
+    private Restaurant restaurant_1;
+    private Restaurant restaurant_2;
+    private Restaurant restaurant_3;
+    private Restaurant restaurant_4;
+    private Restaurant restaurant_5;
+
+    public int Hamburger = 78;
+    public int CocaCola = 35;
+    public int Fries = 23;
+    public int IceCream = 44;
+
+    public ArrayList<Restaurant> restaurantsArray = new ArrayList<>();
+
+    public void Load() {
+        restaurant_1 = new Restaurant();
+        restaurant_1.setNameOfRestaurant("McDonalds");
+        restaurantsArray.add(restaurant_1);
+
+        restaurant_2 = new Restaurant();
+        restaurant_2.setNameOfRestaurant("KFC");
+        restaurantsArray.add(restaurant_2);
+
+        restaurant_3 = new Restaurant();
+        restaurant_3.setNameOfRestaurant("BurgerKing");
+        restaurantsArray.add(restaurant_3);
+
+        restaurant_4 = new Restaurant();
+        restaurant_4.setNameOfRestaurant("Subway");
+        restaurantsArray.add(restaurant_4);
+
+        restaurant_5 = new Restaurant();
+        restaurant_5.setNameOfRestaurant("GUTY");
+        restaurantsArray.add(restaurant_5);
+    }
+
+    public void generateFoodForRestaurants() {
+
+        int selledHamburgers = 0;
+        int selledCocaCola = 0;
+        int selledFries = 0;
+        int selledIceCream = 0;
+
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < restaurantsArray.size(); i++) {
+                selledHamburgers = randomGenerator(1000, 100);
+                restaurantsArray.get(i).setCountOfSoldHamburger(selledHamburgers);
+
+                selledCocaCola = randomGenerator(1000, 100);
+                restaurantsArray.get(i).setCountOfSoldCocaCola(selledCocaCola);
+
+                selledFries = randomGenerator(1000, 100);
+                restaurantsArray.get(i).setCountOfSoldFries(selledFries);
+
+                selledIceCream = randomGenerator(1000, 100);
+                restaurantsArray.get(i).setCountOfSoldIceCream(selledIceCream);
+            }
+            restaurantsArray.get(j).setMonths(selledHamburgers + selledCocaCola + selledFries + selledIceCream);
+
+        }
+
+
+    }
+
+    public void generateMoneyForRestaurants() {
+        for (int i = 0; i < restaurantsArray.size(); i++) {
+            restaurantsArray.get(i).setMoney(restaurantsArray.get(i).getCountOfSoldHamburger() * Hamburger);
+            restaurantsArray.get(i).setMoney(restaurantsArray.get(i).getCountOfSoldCocaCola() * CocaCola);
+            restaurantsArray.get(i).setMoney(restaurantsArray.get(i).getCountOfSoldFries() * Fries);
+            restaurantsArray.get(i).setMoney(restaurantsArray.get(i).getCountOfSoldIceCream() * IceCream);
+        }
+    }
+
+    public void sortByMoney() {
+        for (int i = 0; i < restaurantsArray.size() - 1; i++) {
+            for (int j = 0; j < restaurantsArray.size() - 1; j++) {
+                if (restaurantsArray.get(j).getMoney() < restaurantsArray.get(j + 1).getMoney()) {
+                    Restaurant zaloha = restaurantsArray.get(j);
+                    restaurantsArray.set(j, restaurantsArray.get(j + 1));
+                    restaurantsArray.set(j + 1, zaloha);
+                }
+            }
+        }
+    }
+
+    private int randomGenerator(int max, int min) {
+        Random rnd = new Random();
+        return rnd.nextInt(max - min) + min;
+    }
+
+}
+
+**Restaurant.java**
+package com.company;
+
+import java.util.ArrayList;
+
+public class Restaurant {
+    private String nameOfRestaurant;
+    private int countOfSoldHamburger;
+    private int countOfSoldCocaCola;
+    private int countOfSoldFries;
+    private int countOfSoldIceCream;
+    private float money;
+    private ArrayList<Integer> months = new ArrayList<>();
+
+    public float getMoney() {
+        return money;
+    }
+
+    public void setMoney(float money) {
+        this.money += money;
+    }
+
+    public String getNameOfRestaurant() {
+        return nameOfRestaurant;
+    }
+
+    public void setNameOfRestaurant(String nameOfRestaurant) {
+        this.nameOfRestaurant = nameOfRestaurant;
+    }
+
+    public int getCountOfSoldHamburger() {
+        return countOfSoldHamburger;
+    }
+
+    public void setCountOfSoldHamburger(int countOfSoldHamburger) {
+        this.countOfSoldHamburger += countOfSoldHamburger;
+    }
+
+    public int getCountOfSoldCocaCola() {
+        return countOfSoldCocaCola;
+    }
+
+    public void setCountOfSoldCocaCola(int countOfSoldCocaCola) {
+        this.countOfSoldCocaCola += countOfSoldCocaCola;
+    }
+
+    public int getCountOfSoldFries() {
+        return countOfSoldFries;
+    }
+
+    public void setCountOfSoldFries(int countOfSoldFries) {
+        this.countOfSoldFries += countOfSoldFries;
+    }
+
+    public int getCountOfSoldIceCream() {
+        return countOfSoldIceCream;
+    }
+
+    public void setCountOfSoldIceCream(int countOfSoldIceCream) {
+        this.countOfSoldIceCream += countOfSoldIceCream;
+    }
+
+    public int getMonths(int index) {
+        return months.get(index);
+    }
+
+    public void setMonths(int count) {
+        this.months.add(count);
+    }
+}
