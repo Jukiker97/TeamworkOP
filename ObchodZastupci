@@ -1,0 +1,209 @@
+**MAIN**
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Firma Samsung = new Firma();
+        Samsung.Inicialize();
+
+        for (int i = 0; i <= 11; i++) {
+
+            Samsung.newMonthZisk();
+            System.out.println("--------" + (i+1) + " MĚSÍC----------");
+
+            for (int o = 0; o <= Samsung.newObchZastupci.size() - 1; o++) {
+                System.out.println("Obchodní zástupce: " + Samsung.newObchZastupci.get(o).getJmeno()
+                        + ", vydělal za " + (i + 1)
+                        + " měsíc " + Samsung.newObchZastupci.get(o).getMesicniZisk() + " kč");
+
+            }
+
+        }
+
+        System.out.println("--------ROK----------");
+
+        for (int o = 0; o <= Samsung.newObchZastupci.size() - 1; o++) {
+            Samsung.sortByZiskInYear();
+            System.out.println("Obchodní zástupce: " + Samsung.newObchZastupci.get(o).getJmeno()
+                    + ", vydělal firmě za celý rok " + Samsung.newObchZastupci.get(o).getRocniZisk() + " kč");
+        }
+
+        System.out.println("---------------------------");
+
+        System.out.println("Tržba firmy za rok činí: " + Samsung.getTrzby() + " kč.");
+        System.out.println("Náklady firmy za rok činí: " + Samsung.getNaklady() + " kč.");
+        System.out.println("Zisk firmy za rok činí: " + (Samsung.getTrzby() - Samsung.getNaklady()) + " kč.");
+
+
+    }
+}
+
+**Firma.java**
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Firma {
+
+    private float trzby;
+    private float naklady;
+
+    public ObchZastupce obchZastupce_1;
+    public ObchZastupce obchZastupce_2;
+    public ObchZastupce obchZastupce_3;
+    public ObchZastupce obchZastupce_4;
+    public ObchZastupce obchZastupce_5;
+
+    ArrayList<ObchZastupce> newObchZastupci = new ArrayList<ObchZastupce>();
+
+
+    public void Inicialize() {
+
+        obchZastupce_1 = new ObchZastupce();
+        obchZastupce_1.setJmeno("Honza");
+        newObchZastupci.add(obchZastupce_1);
+
+        obchZastupce_2 = new ObchZastupce();
+        obchZastupce_2.setJmeno("Marketa");
+        newObchZastupci.add(obchZastupce_2);
+
+        obchZastupce_3 = new ObchZastupce();
+        obchZastupce_3.setJmeno("Petr");
+        newObchZastupci.add(obchZastupce_3);
+
+        obchZastupce_4 = new ObchZastupce();
+        obchZastupce_4.setJmeno("Tereza");
+        newObchZastupci.add(obchZastupce_4);
+
+        obchZastupce_5 = new ObchZastupce();
+        obchZastupce_5.setJmeno("Pavel");
+        newObchZastupci.add(obchZastupce_5);
+
+    }
+
+    public void newMonthZisk() {
+        obchZastupce_1.setTrzba(RandomGenerator(1000, 80000));
+        obchZastupce_1.setNaklady(RandomGenerator(10000, 40000));
+        obchZastupce_1.setMesicniZisk(obchZastupce_1.getTrzba() - obchZastupce_1.getNaklady());
+        obchZastupce_1.setRocniZisk(obchZastupce_1.getRocniZisk() + obchZastupce_1.getMesicniZisk());
+
+        obchZastupce_2.setTrzba(RandomGenerator(1000, 80000));
+        obchZastupce_2.setNaklady(RandomGenerator(10000, 40000));
+        obchZastupce_2.setMesicniZisk(obchZastupce_2.getTrzba() - obchZastupce_2.getNaklady());
+        obchZastupce_2.setRocniZisk(obchZastupce_2.getRocniZisk() + obchZastupce_2.getMesicniZisk());
+
+        obchZastupce_3.setTrzba(RandomGenerator(1000, 80000));
+        obchZastupce_3.setNaklady(RandomGenerator(10000, 40000));
+        obchZastupce_3.setMesicniZisk(obchZastupce_3.getTrzba() - obchZastupce_3.getNaklady());
+        obchZastupce_3.setRocniZisk(obchZastupce_3.getRocniZisk() + obchZastupce_3.getMesicniZisk());
+
+        obchZastupce_4.setTrzba(RandomGenerator(1000, 80000));
+        obchZastupce_4.setNaklady(RandomGenerator(10000, 40000));
+        obchZastupce_4.setMesicniZisk(obchZastupce_4.getTrzba() - obchZastupce_4.getNaklady());
+        obchZastupce_4.setRocniZisk(obchZastupce_4.getRocniZisk() + obchZastupce_4.getMesicniZisk());
+
+        obchZastupce_5.setTrzba(RandomGenerator(1000, 80000));
+        obchZastupce_5.setNaklady(RandomGenerator(10000, 40000));
+        obchZastupce_5.setMesicniZisk(obchZastupce_5.getTrzba() - obchZastupce_5.getNaklady());
+        obchZastupce_5.setRocniZisk(obchZastupce_5.getRocniZisk() + obchZastupce_5.getMesicniZisk());
+
+        this.trzby += obchZastupce_1.getTrzba() + obchZastupce_2.getTrzba() + obchZastupce_3.getTrzba() + obchZastupce_4.getTrzba() + obchZastupce_5.getTrzba();
+        this.naklady += obchZastupce_1.getNaklady() + obchZastupce_2.getNaklady() + obchZastupce_3.getNaklady() + obchZastupce_4.getNaklady() + obchZastupce_5.getNaklady();
+
+        sortByZisk();
+    }
+
+    private void sortByZisk() {
+        for (int o = 0; o < newObchZastupci.size() - 1; o++) {
+            for (int i = 0; i < newObchZastupci.size() - 1; i++) {
+                if (newObchZastupci.get(i).getMesicniZisk() < newObchZastupci.get(i + 1).getMesicniZisk()) {
+                    ObchZastupce zaloha = newObchZastupci.get(i);
+                    newObchZastupci.set(i, newObchZastupci.get(i + 1));
+                    newObchZastupci.set(i + 1, zaloha);
+                }
+            }
+        }
+    }
+
+    public void sortByZiskInYear() {
+        for (int o = 0; o < newObchZastupci.size() - 1; o++) {
+            for (int i = 0; i < newObchZastupci.size() - 1; i++) {
+                if (newObchZastupci.get(i).getRocniZisk() < newObchZastupci.get(i + 1).getRocniZisk()) {
+                    ObchZastupce zaloha = newObchZastupci.get(i);
+                    newObchZastupci.set(i, newObchZastupci.get(i + 1));
+                    newObchZastupci.set(i + 1, zaloha);
+                }
+            }
+        }
+    }
+
+
+    public float RandomGenerator(float min, float max) {
+        Random rnd = new Random();
+        return min + rnd.nextFloat() * (max - min);
+    }
+
+    public float getTrzby() {
+        return trzby;
+    }
+
+    public float getNaklady() {
+        return naklady;
+    }
+
+}
+
+**ObchZastupce.java**
+package com.company;
+
+public class ObchZastupce {
+
+    private String jmeno;
+    private float trzba;
+    private float naklady;
+    private float mesicniZisk;
+    private float rocniZisk;
+
+
+    public String getJmeno() {
+        return jmeno;
+    }
+
+    public void setJmeno(String jmeno) {
+        this.jmeno = jmeno;
+    }
+
+    public float getTrzba() {
+        return trzba;
+    }
+
+    public void setTrzba(float trzba) {
+        this.trzba = trzba;
+    }
+
+    public float getNaklady() {
+        return naklady;
+    }
+
+    public void setNaklady(float naklady) {
+        this.naklady = naklady;
+    }
+
+    public float getMesicniZisk() {
+        return mesicniZisk;
+    }
+
+    public void setMesicniZisk(float mesicniZisk) {
+        this.mesicniZisk = mesicniZisk;
+    }
+
+    public float getRocniZisk() {
+        return rocniZisk;
+    }
+
+    public void setRocniZisk(float rocniZisk) {
+        this.rocniZisk = rocniZisk;
+    }
+}
