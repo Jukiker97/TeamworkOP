@@ -1,0 +1,207 @@
+**Main.java**
+
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Hriste GolfH = new Hriste();
+        GolfH.Load();
+
+        for (int i = 0; i <= 8; i++) {
+
+            GolfH.PLAY(i);
+            GolfH.SortByJednaJamka(i);
+
+            for (int j = 0; j < GolfH.Hraci.size() - 1; j++) {
+                System.out.println("Jamka číslo: " + (i + 1) + "| Hráč " + GolfH.Hraci.get(j).getJmenoHrace() + ", odehral celkem " + GolfH.Hraci.get(j).getPocetRanPOJednotlivychJamkach(i) + " ran.");
+            }
+            System.out.println("---------------------");
+        }
+
+        for (int i = 0; i <= GolfH.Hraci.size() - 1; i++) {
+            System.out.println("Hráč " + GolfH.Hraci.get(i).getJmenoHrace() + " skončil s celkovým počtem ran " + GolfH.Hraci.get(i).getCelkovyPocetRan());
+        }
+
+        System.out.println("---------------------");
+
+        for (int i = 0; i <= 8; i++) {
+            for (int j = 0; j < GolfH.Hraci.size() - 1; j++) {
+                System.out.println("Pro jamku číslo: " + (i + 1) + " hráč " + GolfH.Hraci.get(j).getJmenoHrace() + " potřeboval " + GolfH.Hraci.get(j).getpocetRanNaJednotlivychJamkach(i) + " úderů.");
+
+            }
+            System.out.println("---------------------");
+        }
+
+    }
+}
+
+**Hriste.java**
+
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Hriste {
+
+    private int[] jamky;
+
+
+    public Hrac hrac_1;
+    public Hrac hrac_2;
+    public Hrac hrac_3;
+    public Hrac hrac_4;
+    public Hrac hrac_5;
+    public Hrac hrac_6;
+    public Hrac hrac_7;
+    public Hrac hrac_8;
+    public Hrac hrac_9;
+    public Hrac hrac_10;
+
+
+    public ArrayList<Hrac> Hraci = new ArrayList<>();
+
+    public void Load() {
+        jamky = new int[9];
+
+        jamky[0] = 3;
+        jamky[1] = 3;
+        jamky[2] = 4;
+        jamky[3] = 5;
+        jamky[4] = 4;
+        jamky[5] = 5;
+        jamky[6] = 3;
+        jamky[7] = 3;
+        jamky[8] = 4;
+
+        hrac_1 = new Hrac();
+        hrac_1.setJmenoHrace("Petr");
+        Hraci.add(hrac_1);
+
+        hrac_2 = new Hrac();
+        hrac_2.setJmenoHrace("Michal");
+        Hraci.add(hrac_2);
+
+        hrac_3 = new Hrac();
+        hrac_3.setJmenoHrace("Bedřich");
+        Hraci.add(hrac_3);
+
+        hrac_4 = new Hrac();
+        hrac_4.setJmenoHrace("Adéla");
+        Hraci.add(hrac_4);
+
+        hrac_5 = new Hrac();
+        hrac_5.setJmenoHrace("Matěj");
+        Hraci.add(hrac_5);
+
+        hrac_6 = new Hrac();
+        hrac_6.setJmenoHrace("Aneta");
+        Hraci.add(hrac_6);
+
+        hrac_7 = new Hrac();
+        hrac_7.setJmenoHrace("Pavel");
+        Hraci.add(hrac_7);
+
+        hrac_8 = new Hrac();
+        hrac_8.setJmenoHrace("Václav");
+        Hraci.add(hrac_8);
+
+        hrac_9 = new Hrac();
+        hrac_9.setJmenoHrace("Daniel");
+        Hraci.add(hrac_9);
+
+        hrac_10 = new Hrac();
+        hrac_10.setJmenoHrace("Miloš");
+        Hraci.add(hrac_10);
+    }
+
+    public void PLAY(int cisloJamky) {
+            for (int i = 0; i <= 10-1; i++) {
+                int pocetRan = generatorRan(1, (jamky[cisloJamky] + 2));
+
+                Hraci.get(i).setpocetRanNaJednotlivychJamkach(pocetRan);
+
+                if(cisloJamky == 0)
+                {
+                    Hraci.get(i).setPocetRanPOJednotlivychJamkach(pocetRan);
+                }
+                else
+                {
+                    Hraci.get(i).setPocetRanPOJednotlivychJamkach(Hraci.get(i).getPocetRanPOJednotlivychJamkach(cisloJamky-1) + pocetRan);
+                }
+
+                Hraci.get(i).setCelkovyPocetRan(Hraci.get(i).getCelkovyPocetRan() + pocetRan);
+
+            }
+
+
+
+    }
+
+    public void SortByJednaJamka(int cisloJamky){
+        for (int o = 0; o < Hraci.size()-1; o++) {
+            for (int i = 0; i < Hraci.size()-1; i++) {
+                if(Hraci.get(i).getPocetRanPOJednotlivychJamkach(cisloJamky) > Hraci.get(i+1).getPocetRanPOJednotlivychJamkach(cisloJamky)){
+                    Hrac zaloha = Hraci.get(i);
+                    Hraci.set(i, Hraci.get(i+1));
+                    Hraci.set(i+1, zaloha);
+                }
+            }
+        }
+    }
+
+    private int generatorRan(int min, int max) {
+        Random rnd = new Random();
+        return (rnd.nextInt(max)+1);
+    }
+}
+
+**Hrac.java**
+
+package com.company;
+
+import java.util.ArrayList;
+
+public class Hrac {
+
+    private String jmenoHrace;
+    private int celkovyPocetRan;
+    private ArrayList<Integer> pocetRanNaJednotlivychJamkach = new ArrayList<>();
+    private ArrayList<Integer> pocetRanPOJednotlivychJamkach = new ArrayList<>();
+
+    public int getpocetRanNaJednotlivychJamkach(int index) {
+        return pocetRanNaJednotlivychJamkach.get(index).intValue();
+
+    }
+
+    public void setpocetRanNaJednotlivychJamkach(int rana) {
+        this.pocetRanNaJednotlivychJamkach.add(rana);
+
+    }
+
+    public int getCelkovyPocetRan() {
+        return celkovyPocetRan;
+    }
+
+    public void setCelkovyPocetRan(int celkovyPocetRan) {
+        this.celkovyPocetRan = celkovyPocetRan;
+    }
+
+    public String getJmenoHrace() {
+        return jmenoHrace;
+    }
+
+    public void setJmenoHrace(String jmenoHrace) {
+        this.jmenoHrace = jmenoHrace;
+    }
+
+    public int getPocetRanPOJednotlivychJamkach(int index) {
+        return pocetRanPOJednotlivychJamkach.get(index).intValue();
+    }
+
+    public void setPocetRanPOJednotlivychJamkach(int rana) {
+        this.pocetRanPOJednotlivychJamkach.add(rana);
+    }
+}
+
