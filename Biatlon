@@ -1,0 +1,161 @@
+**Main**
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Zavod novyZavod = new Zavod();
+        novyZavod.Load();
+
+        System.out.println("----------START-----------");
+        novyZavod.Usek();
+        System.out.println("----------První úsek-----------");
+        novyZavod.Strelba();
+        System.out.println("----------První střelba-----------");
+
+        for (int i = 0; i < novyZavod.zavodnici.size(); i++) {
+            System.out.println("Na " + (i+1) + " pozici je závodník s číslem " + novyZavod.zavodnici.get(i).ID);
+        }
+
+        novyZavod.Usek();
+        System.out.println("----------Druhý úsek-----------");
+        novyZavod.Strelba();
+        System.out.println("----------Druhá střelba-----------");
+
+        for (int i = 0; i < novyZavod.zavodnici.size(); i++) {
+            System.out.println("Na " + (i+1) + " pozici je závodník s číslem " + novyZavod.zavodnici.get(i).ID);
+        }
+
+        System.out.println("----------FINISH-----------");
+        System.out.println("----------STATISTIKY ZÁVODNíKU-----------");
+
+        for (int i = 0; i < novyZavod.zavodnici.size(); i++) {
+            System.out.println("Na " + (i+1) + " pozici se umístil závodník s číslem " + novyZavod.zavodnici.get(i).ID);
+            System.out.println("První úsek zajel v čase " + novyZavod.zavodnici.get(i).Usek.get(0) + " minut.");
+            System.out.println("První střelbu na terč zvládl s počtem " + novyZavod.zavodnici.get(i).Terc.get(0) + " trefených terčů. (Penalizace: " + (5-novyZavod.zavodnici.get(i).Terc.get(0)) + " minut)");
+            System.out.println("Druhý úsek zajel v čase " + novyZavod.zavodnici.get(i).Usek.get(1) + " minut.");
+            System.out.println("Druhou střelbu na terč zvládl s počtem " + novyZavod.zavodnici.get(i).Terc.get(1) + " trefených terčů.(Penalizace: " + (5-novyZavod.zavodnici.get(i).Terc.get(1)) + " minut)");
+            System.out.println("Celý závod zajel v čase " + novyZavod.zavodnici.get(i).time + " minut.");
+            System.out.println("-----------------------");
+        }
+
+    }
+}
+
+**Zavod.java**
+
+package com.company;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Zavod {
+
+    ArrayList<Zavodnik> zavodnici;
+
+    public Zavodnik zavodnik_1;
+    public Zavodnik zavodnik_2;
+    public Zavodnik zavodnik_3;
+    public Zavodnik zavodnik_4;
+    public Zavodnik zavodnik_5;
+    public Zavodnik zavodnik_6;
+    public Zavodnik zavodnik_7;
+    public Zavodnik zavodnik_8;
+    public Zavodnik zavodnik_9;
+    public Zavodnik zavodnik_10;
+
+    public void Load() {
+            zavodnici = new ArrayList<>();
+
+            zavodnik_1 = new Zavodnik();
+            zavodnik_1.ID = 1;
+            zavodnici.add(zavodnik_1);
+
+            zavodnik_2 = new Zavodnik();
+            zavodnik_2.ID = 2;
+            zavodnici.add(zavodnik_2);
+
+            zavodnik_3 = new Zavodnik();
+            zavodnik_3.ID = 3;
+            zavodnici.add(zavodnik_3);
+
+            zavodnik_4 = new Zavodnik();
+            zavodnik_4.ID = 4;
+            zavodnici.add(zavodnik_4);
+
+            zavodnik_5 = new Zavodnik();
+            zavodnik_5.ID = 5;
+            zavodnici.add(zavodnik_5);
+
+            zavodnik_6 = new Zavodnik();
+            zavodnik_6.ID = 6;
+            zavodnici.add(zavodnik_6);
+
+            zavodnik_7 = new Zavodnik();
+            zavodnik_7.ID = 7;
+            zavodnici.add(zavodnik_7);
+
+            zavodnik_8 = new Zavodnik();
+            zavodnik_8.ID = 8;
+            zavodnici.add(zavodnik_8);
+
+            zavodnik_9 = new Zavodnik();
+            zavodnik_9.ID = 9;
+            zavodnici.add(zavodnik_9);
+
+            zavodnik_10 = new Zavodnik();
+            zavodnik_10.ID = 10;
+            zavodnici.add(zavodnik_10);
+    }
+
+    public void Usek() {
+        for (int i = 0; i < zavodnici.size(); i++) {
+            int casZaUsek = randomNumber(5, 10);
+            zavodnici.get(i).Usek.add(casZaUsek);
+            zavodnici.get(i).time += casZaUsek;
+        }
+       // SortByTime();
+    }
+
+    public void Strelba() {
+        for (int i = 0; i < zavodnici.size(); i++) {
+            int trefeneTerce = randomNumber(0, 5);
+            zavodnici.get(i).Terc.add(trefeneTerce);
+            zavodnici.get(i).time += (5 - trefeneTerce);
+        }
+        SortByTime();
+    }
+
+    public void SortByTime(){
+        for (int o = 0; o < zavodnici.size(); o++) {
+            for (int i = 0; i < zavodnici.size()-1; i++) {
+                if(zavodnici.get(i).time > zavodnici.get(i+1).time){
+                    Zavodnik zaloha = zavodnici.get(i);
+                    zavodnici.set(i, zavodnici.get(i+1));
+                    zavodnici.set((i+1), zaloha);
+                }
+            }
+        }
+    }
+
+    private int randomNumber(int min, int max) {
+        Random rnd = new Random();
+        return rnd.nextInt(max-min)+min;
+    }
+
+
+}
+
+**Zavodnik.java**
+
+package com.company;
+
+import java.util.ArrayList;
+
+public class Zavodnik {
+    public int ID;
+    public int time;
+    public ArrayList<Integer> Terc = new ArrayList<>();
+    public ArrayList<Integer> Usek = new ArrayList<>();
+
+}
